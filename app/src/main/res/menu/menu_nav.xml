@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu  xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/border_false"
+        android:title="@string/home"/>
+
+    <item
+        android:id="@+id/nav_quizz"
+        android:icon="@drawable/border_false"
+        android:title="@string/quizz"/>
+    <item
+        android:id="@+id/nav_arondissement"
+        android:icon="@drawable/img_district1"
+        android:title="@string/arrondissement" />
+
+    <item
+        android:id="@+id/nav_friend"
+        android:icon="@drawable/photochaouche"
+        android:title="@string/friends" />
+    <item
+        android:id="@+id/nav_challenge"
+        android:icon="@drawable/ic_challenge"
+        android:title="@string/challenge" />
+    <item
+        android:id="@+id/nav_sensor"
+        android:icon="@drawable/ic_sensor"
+        android:title="@string/sensor" />
+    <item
+        android:id="@+id/nav_chat"
+        android:icon="@drawable/ic_question_answer_24dp"
+        android:title="@string/chat" />
+    <item
+        android:id="@+id/nav_second"
+        android:icon="@drawable/ic_exit"
+        android:title="@string/disconnect" />
+</menu>
+
+

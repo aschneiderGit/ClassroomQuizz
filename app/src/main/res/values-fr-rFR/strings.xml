@@ -23,9 +23,14 @@
     <string name="last_score">"Dernier score : "</string>
     <string name="defaultLogin">aschneider</string>
     <string name ="home">Accueil</string>
-    <string name="defautMdp">1234</string>
-    <string name="sensor_title">Capteur IOT</string>
+    <string name="defautMdp">azerty</string>
     <string name="disconnect">Se déconnecter</string>
     <string name="sensor">Capteur</string>
     <string name="challenge">Challenge</string>
+    <string name="chat">Chat</string>
+    <string name="server">Serveur:</string>
+    <string name="temperature">Température</string>
+    <string name="light">Luminosité</string>
+    <string name="camera">Camera</string>
+    <string name="scanner">Scanner</string>
 </resources>

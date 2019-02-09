@@ -22,13 +22,17 @@
     <string name="defaut_score">100</string>
     <string name="defaultLogin">aschneider</string>
     <string name="home">Home</string>
-    <string name="defautMdp">1234</string>
+    <string name="defautMdp">azerty</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="sensor_title">Captor IOT</string>
     <string name="disconnect">Disconnect</string>
     <string name="sensor">Sensor</string>
     <string name="challenge">Challenge</string>
     <string name="chat">Chat</string>
+    <string name="server">Server :</string>
+    <string name="temperature">Temperature</string>
+    <string name="light">Light</string>
+    <string name="camera">Camera</string>
+    <string name="scanner">Scanner</string>
 
 </resources>

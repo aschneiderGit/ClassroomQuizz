@@ -10,4 +10,7 @@
     <color name="text_layout2">#00a3f5</color>
     <color name="text_btn_arrondissement">#ffffff</color>
     <color name="color_icon_nav">#00a3f5</color>
+    <color name="fond_temp">#F14848</color>
+    <color name="fond_humidity">#61DFF1</color>
+    <color name="fond_power">#B6EC7C</color>
 </resources>

@@ -1,13 +1,18 @@
-package tk.aimeschneider.classroomquizz.Activity;
+package tk.aimeschneider.classroomquizz.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -18,17 +23,18 @@ import java.util.ArrayList;
 import de.tavendo.autobahn.WebSocketConnection;
 import de.tavendo.autobahn.WebSocketException;
 import de.tavendo.autobahn.WebSocketHandler;
-import tk.aimeschneider.classroomquizz.ModelOnly.Connection;
+import tk.aimeschneider.classroomquizz.Activity.MainActivity;
+import tk.aimeschneider.classroomquizz.ModelOnly.Controller;
 import tk.aimeschneider.classroomquizz.ModelOnly.Friend;
 import tk.aimeschneider.classroomquizz.ModelOnly.Message;
 import tk.aimeschneider.classroomquizz.MyElements.MessageAdapter;
 import tk.aimeschneider.classroomquizz.R;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatFragment extends Fragment  {
 
     private WebSocketConnection mConnection;
+    private Context ctx;
 
-	String serverIpAddress = "192.168.137.101";
     private static final String TAG = "ChatActivity";
 
     private MessageAdapter mAdapter;
@@ -39,30 +45,26 @@ public class ChatActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     public Friend me;
 
+    public ChatFragment() {}
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_chat , container, false);
+        ctx = this.getContext();
+        me = Controller.me;
+        messageET = view.findViewById(R.id.editMessage);
+        sendBtn = view.findViewById(R.id.sendIV);
+        recyclerView = view.findViewById(R.id.messagesRL);
 
-        Intent i = getIntent();
-        me = Connection.me;
-
-        messageET = findViewById(R.id.editMessage);
-        sendBtn = findViewById(R.id.sendIV);
-        recyclerView = findViewById(R.id.messagesRL);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(ctx);
         layoutManager.setStackFromEnd(true);
-
         recyclerView.setLayoutManager(layoutManager);
-
         mAdapter = new MessageAdapter(messagesRL);
-
         recyclerView.setAdapter(mAdapter);
 
         try {
             mConnection = new WebSocketConnection();
-            final String wsUrl = "ws://" + serverIpAddress + ":8080";
+            final String wsUrl = "ws://" + Controller.LOCALHOST + ":8080";
             mConnection.connect(wsUrl, new WebSocketHandler() {
 
                 @Override
@@ -141,12 +143,10 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+        return view;
 
     }
 
-    /**
-     * Scroller notre recyclerView en bas
-     */
     private void scrollToBottom() {
         recyclerView.scrollToPosition(messagesRL.size() - 1);
     }
@@ -154,6 +154,7 @@ public class ChatActivity extends AppCompatActivity {
     private String getMessage() {
         return messageET.getText().toString().trim();
     }
+
 
 
 }

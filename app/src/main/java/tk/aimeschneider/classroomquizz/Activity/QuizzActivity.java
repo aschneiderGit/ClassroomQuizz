@@ -2,10 +2,13 @@ package tk.aimeschneider.classroomquizz.Activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +26,7 @@ import android.widget.Toast;
 
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,15 +34,17 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import tk.aimeschneider.classroomquizz.ModelOnly.Controller;
+import tk.aimeschneider.classroomquizz.ModelOnly.Friend;
 import tk.aimeschneider.classroomquizz.R;
-import tk.aimeschneider.classroomquizz.ModelOnly.Connection;
-import tk.aimeschneider.classroomquizz.ModelOnly.Navigation;
 import tk.aimeschneider.classroomquizz.ModelOnly.Question;
 
 import static android.support.constraint.Constraints.TAG;
 import static java.lang.Thread.sleep;
-import static tk.aimeschneider.classroomquizz.ModelOnly.Connection.SERVER_KEY;
-import static tk.aimeschneider.classroomquizz.ModelOnly.Connection.WEB_QUESTION_REQUEST;
+import static tk.aimeschneider.classroomquizz.ModelOnly.Controller.SERVER_KEY;
+import static tk.aimeschneider.classroomquizz.ModelOnly.Controller.WEB_FRIENDS_IMG;
+import static tk.aimeschneider.classroomquizz.ModelOnly.Controller.WEB_QUESTION_REQUEST;
+import static tk.aimeschneider.classroomquizz.ModelOnly.Controller.myFriends;
 
 
 public class QuizzActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,11 +58,19 @@ public class QuizzActivity extends AppCompatActivity implements NavigationView.O
     private TextView txtTpsRestant;
     private RelativeLayout rlQuizz;
     private TextView txtQuestion;
+    private TextView txtPseudo1;
+    private TextView txtPseudo2;
+    private TextView txtScore1;
+    private TextView txtScore2;
+    private ImageView imgAvatar1;
+    private ImageView imgAvatar2;
     private ProgressTime pt;
     private ArrayList<Button> btnReponses = new ArrayList<Button>();
     private ActionBarDrawerToggle toggle;
     private DrawerLayout dl;
     private ProgressDialog pDialog;
+
+    private Friend friend;
 
     private View.OnClickListener VerifReponseListener = new View.OnClickListener() {
         @Override
@@ -67,8 +82,35 @@ public class QuizzActivity extends AppCompatActivity implements NavigationView.O
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Bundle b = getIntent().getExtras();
+        int value = -1; // or other values
+        if(b != null)
+            value = b.getInt("friend");
+        friend = myFriends.get(value);
         setContentView(R.layout.activity_quizz);
         txtQuestion =  findViewById(R.id.txtQuestion);
+        txtPseudo1 =  findViewById(R.id.txtPseudo1);
+        txtPseudo2 =  findViewById(R.id.txtPseudo2);
+        txtScore1 = findViewById(R.id.txtScore1);
+        txtScore2 = findViewById(R.id.txtScore2);
+        imgAvatar1 =  findViewById(R.id.imgAvatar1);
+        imgAvatar2 =  findViewById(R.id.imgAvatar2);
+        txtPseudo1.setText(Controller.me.getPrenom());
+        txtPseudo2.setText(friend.getPrenom());
+        if (!Controller.me.getPhotoPath().isEmpty() && Controller.me.getPhotoPath()!= "null")
+            Picasso.with(imgAvatar1.getContext()).load(WEB_FRIENDS_IMG  + Controller.me.getPhotoPath()).into(imgAvatar1);
+        else
+        {
+            Drawable color = new ColorDrawable(Color.parseColor(Controller.me.getRandomColor()));
+            imgAvatar1.setImageDrawable(color);
+        }
+        if (!friend.getPhotoPath().isEmpty() && friend.getPhotoPath()!= "null")
+            Picasso.with(imgAvatar2.getContext()).load(WEB_FRIENDS_IMG  +friend.getPhotoPath()).into(imgAvatar2);
+        else
+        {
+            Drawable color = new ColorDrawable(Color.parseColor(Controller.me.getRandomColor()));
+            imgAvatar2.setImageDrawable(color);
+        }
         rlQuizz = findViewById(R.id.LayoutQuestion);
         dl =  findViewById(R.id.drawerLayoutFragment);
         NavigationView nav = findViewById(R.id.nvQuizz);
@@ -76,7 +118,7 @@ public class QuizzActivity extends AppCompatActivity implements NavigationView.O
         dl.setDrawerListener(toggle);
         toggle.syncState();
         nav.setNavigationItemSelectedListener(this);
-        nav.getMenu().performIdentifierAction(R.id.nav_quizz,0);
+        nav.getMenu().performIdentifierAction(R.id.nav_challenge,0);
 
     }
 
@@ -100,14 +142,12 @@ public class QuizzActivity extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
-        Navigation.onNavigationItemSelected(item,this);
-        dl.closeDrawer(GravityCompat.START);
         return true;
     }
 
     private void LoadQuestions()
     {
-        if (Connection.checkConnection(this)) {
+        if (Controller.checkConnection(this)) {
             pDialog = new ProgressDialog(this);
             pDialog.setMessage("Getting list of questions...");
             pDialog.setIndeterminate(false);
@@ -222,6 +262,10 @@ public class QuizzActivity extends AppCompatActivity implements NavigationView.O
         if (questions.get(index_question).IsBonneReponse(b.getText().toString()))
         {
             b.setBackgroundResource(R.drawable.border_true);
+            int score = Integer.parseInt(txtTpsRestant.getText().toString());
+            int score1 = Integer.parseInt(txtScore1.getText().toString());
+            int newScore1 = score + score1;
+            txtScore1.setText(Integer.toString(newScore1));
             try {
                 sleep(500);
             } catch (InterruptedException e) {

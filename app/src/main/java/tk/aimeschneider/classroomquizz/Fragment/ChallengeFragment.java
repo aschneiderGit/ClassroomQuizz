@@ -2,6 +2,7 @@ package tk.aimeschneider.classroomquizz.Fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,9 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,21 +31,21 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import tk.aimeschneider.classroomquizz.Activity.FriendActivity;
-import tk.aimeschneider.classroomquizz.ModelOnly.Connection;
+import tk.aimeschneider.classroomquizz.Activity.QuizzActivity;
+import tk.aimeschneider.classroomquizz.ModelOnly.Controller;
 import tk.aimeschneider.classroomquizz.ModelOnly.Friend;
+import tk.aimeschneider.classroomquizz.MyElements.ButtonFriend;
 import tk.aimeschneider.classroomquizz.R;
 
 import static android.support.constraint.Constraints.TAG;
-import static tk.aimeschneider.classroomquizz.ModelOnly.Connection.LOCALHOST;
-import static tk.aimeschneider.classroomquizz.ModelOnly.Connection.SERVER_KEY;
-import static tk.aimeschneider.classroomquizz.ModelOnly.Connection.WEB_FRIENDS_IMG;
-import static tk.aimeschneider.classroomquizz.ModelOnly.Connection.WEB_FRIENDS_REQUEST;
+import static tk.aimeschneider.classroomquizz.ModelOnly.Controller.SERVER_KEY;
+import static tk.aimeschneider.classroomquizz.ModelOnly.Controller.WEB_FRIENDS_IMG;
+import static tk.aimeschneider.classroomquizz.ModelOnly.Controller.WEB_FRIENDS_REQUEST;
+import static tk.aimeschneider.classroomquizz.ModelOnly.Controller.myFriends;
 
 public class ChallengeFragment extends Fragment {
 
     private ProgressDialog pDialog;
-    private ArrayList<Friend> myFriends;
     private Context ctx;
 
     public ChallengeFragment() {}
@@ -59,7 +59,7 @@ public class ChallengeFragment extends Fragment {
     }
 
     private void LoadFriends() {
-        if (Connection.checkConnection(ctx)) {
+        if (Controller.checkConnection(ctx)) {
             pDialog = new ProgressDialog(this.getContext());
             pDialog.setMessage("Getting list of friends...");
             pDialog.setIndeterminate(false);
@@ -90,6 +90,7 @@ public class ChallengeFragment extends Fragment {
                                     Toast.makeText(ctx, "Erreur lors de l'accès aux amis", Toast.LENGTH_SHORT).show();
                                 }
                             }
+                            pDialog.dismiss();
 
                         }
                     });
@@ -208,9 +209,16 @@ public class ChallengeFragment extends Fragment {
                                     }
                                 }
                             }
+                            break;
+                        }
+                        case  R.id.btnFriendSquare:
+                        {
+                            ButtonFriend btnFriend = (ButtonFriend) subNextChild;
+                            btnFriend.setFriend(myFriends.get(position));
+                            btnFriend.setOnClickListener(VerifReponseListener);
+                            break;
                         }
                     }
-
                 }
             }
 
@@ -218,15 +226,19 @@ public class ChallengeFragment extends Fragment {
         }
     }
 
-    //pour charger l'image des amis
-    public static Drawable LoadImageFromWebOperations(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is,"");
-            return d;
-        } catch (Exception e) {
-            return null;
+    private View.OnClickListener VerifReponseListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            StartQuizz((ButtonFriend)v);
         }
-    }
+    };
 
+    private void StartQuizz(ButtonFriend v) {
+        Intent intent = new Intent(getActivity(), QuizzActivity.class);
+        Bundle b = new Bundle();
+        b.putInt("friend", myFriends.indexOf(v.getFriend()) ); //Your id
+        intent.putExtras(b); //Put your id to your next Intent
+        getActivity().finish();
+        startActivity(intent);
+    }
 }

@@ -4,22 +4,9 @@
 
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/border_false"
+        android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/home"/>
 
-    <item
-        android:id="@+id/nav_quizz"
-        android:icon="@drawable/border_false"
-        android:title="@string/quizz"/>
-    <item
-        android:id="@+id/nav_arondissement"
-        android:icon="@drawable/img_district1"
-        android:title="@string/arrondissement" />
-
-    <item
-        android:id="@+id/nav_friend"
-        android:icon="@drawable/photochaouche"
-        android:title="@string/friends" />
     <item
         android:id="@+id/nav_challenge"
         android:icon="@drawable/ic_challenge"
@@ -33,7 +20,7 @@
         android:icon="@drawable/ic_question_answer_24dp"
         android:title="@string/chat" />
     <item
-        android:id="@+id/nav_second"
+        android:id="@+id/nav_quit"
         android:icon="@drawable/ic_exit"
         android:title="@string/disconnect" />
 </menu>

@@ -9,7 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static tk.aimeschneider.classroomquizz.ModelOnly.Connection.TAG;
+import static tk.aimeschneider.classroomquizz.ModelOnly.Controller.TAG;
 
 public class Message {
 
@@ -44,8 +44,8 @@ public class Message {
     public static String setMessageToJson(Message message)
     {
         Friend f = message.getSource();
-        String json = "{\"source\":{" +
-                "    \"token\": \"" + f.getToken() + "\"" + "}, "+
+        String json = "{\"source\":\"{" +
+                "\\\"token\\\": \\\"" + f.getToken() + "\\\"" + "}\", "+
                 "\"message\" : \"" + message.getMessage() +"\"}";
         Log.i(TAG, "setMessageToJson: " + json);
         return json;
@@ -54,7 +54,7 @@ public class Message {
 
     public boolean isMe()
     {
-        return (source.getId() == Connection.me.getId());
+        return (source.getId() == Controller.me.getId());
     }
 
 }

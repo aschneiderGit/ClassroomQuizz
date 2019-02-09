@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:configChanges="orientation"
+    android:screenOrientation="portrait"
     tools:context="tk.aimeschneider.classroomquizz.Activity.LoginActivity">
 
     <LinearLayout
@@ -25,8 +27,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
-            android:text="@string/login" />
+            android:text="@string/login"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/edtLogin"
@@ -43,8 +48,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
-            android:text="@string/mdp" />
+            android:text="@string/mdp"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/edtMdp"
@@ -56,11 +64,52 @@
             android:inputType="textPassword"
             android:text="@string/defautMdp" />
 
+        <TextView
+            android:id="@+id/tvServer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/server"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:id="@+id/lyServer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edtServer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerHorizontal="true"
+                android:ems="10"
+                android:inputType="numberSigned|number|numberDecimal|phone" />
+
+            <Spinner
+                android:id="@+id/spServer"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/edtServer"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:spinnerMode="dialog" />
+        </RelativeLayout>
+
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
             android:text="@string/conect" />
     </LinearLayout>
